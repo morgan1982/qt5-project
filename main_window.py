@@ -14,7 +14,9 @@ class Window(QWidget):
         self.init_ui()
 
     def init_ui(self):
-        self.b = QPushButton('add records')
+        self.b = QPushButton('add record')
+        self.b2 = QPushButton('delete record')
+
         self.l = QLabel('Keychain')
         self.l2 = QLabel('logo')
         self.pixmap = QtGui.QPixmap('./images/key.png')
@@ -39,6 +41,7 @@ class Window(QWidget):
         h_box3 = QHBoxLayout()
         h_box3.addSpacing(400)
         h_box3.addWidget(self.b)
+        h_box3.addWidget(self.b2)
 
         h_box2 = QHBoxLayout()
         h_box2.addSpacing(150)
@@ -63,7 +66,11 @@ class Window(QWidget):
         self.setLayout(v_box)
         self.setWindowTitle('keychain')
 
-        self.b.clicked.connect(self.add_record)
+        # use lambda to send more information to slot from signa
+        self.b.clicked.connect(lambda: self.btn_clicked_2(self.b, 'hello from add record'))
+        self.b2.clicked.connect(lambda: self.btn_clicked_2(self.b2, 'hello from delete record'))
+        self.slider.valueChanged.connect(self.v_change)
+
         self.btn_print.clicked.connect(self.btn_clicked)
         self.btn_clear.clicked.connect(self.btn_clicked)
         self.setWindowTitle('keychain')
@@ -81,6 +88,17 @@ class Window(QWidget):
             print(self.line_edit.text())
         else:
             self.line_edit.clear()
+
+    def btn_clicked_2(self, btn, string):
+        if btn.text() == 'add record':
+            print('record added')
+        else:
+            print('deleted')
+        print(string)
+
+    def v_change(self):
+        my_value = str(self.slider.value())
+        self.line_edit.setText(my_value)
 
 
 app = QApplication(sys.argv)
